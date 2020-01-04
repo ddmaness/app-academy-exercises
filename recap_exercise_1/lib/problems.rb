@@ -144,5 +144,3 @@ class String
         cipher.join('')
     end
 end
-
-"donnie".caesar_cipher(1)
