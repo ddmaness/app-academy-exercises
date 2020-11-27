@@ -1,3 +1,5 @@
+require('byebug')
+
 def range(start_val, end_val)
     return [] if start_val >= end_val
     return [start_val] if start_val == end_val - 1
@@ -112,20 +114,9 @@ def recursive_fib (n)
     seq
 end
 
-p recursive_fib(6)
+# p recursive_fib(6)
 
 def bsearch(array, target)
-    # middle_index = array.length / 2
-    # if array.length == 0
-    #     return nil
-    # end
-    # if array[middle_index] == target
-    #     return middle_index
-    # elsif array[middle_index] > target
-    #     bsearch(array[0...middle_index], target)
-    # elsif array[middle_index] < target
-    #     bsearch(array[(middle_index + 1)..-1], target)
-    # end
     middle_index = (array.length - 1) / 2
     if array.length == 0
         return nil
@@ -148,14 +139,68 @@ def bsearch(array, target)
 end
 
 # test cases
-p bsearch([1, 3, 4, 5, 9], 4) # => 2
-p bsearch([1, 3, 4, 5, 9], 5) # => 3
-p bsearch([1, 3, 4, 5, 9], 9) # => 4
-p bsearch([1, 3, 4, 5, 9, 11, 12, 14], 12) # => 6
-p bsearch([1, 3, 4, 5, 9, 11, 12, 14], 4) # => 2
-p bsearch([1, 3, 4, 5, 9], 3) # => 1
-p bsearch([1, 3, 4, 5, 9], 1) # => 0
-p bsearch([1, 3, 4, 5, 9, 11, 12, 14], 3) # => 1
-p bsearch([1, 3, 4, 5, 9, 11, 12, 14, 15], 9) # => 4
-p bsearch([1, 2, 3, 4, 5, 6], 0) # => nil
-p bsearch([1, 2, 3, 4, 5, 7], 6) # => nil
+# p bsearch([1, 3, 4, 5, 9], 4) # => 2
+# p bsearch([1, 3, 4, 5, 9], 5) # => 3
+# p bsearch([1, 3, 4, 5, 9], 9) # => 4
+# p bsearch([1, 3, 4, 5, 9, 11, 12, 14], 12) # => 6
+# p bsearch([1, 3, 4, 5, 9, 11, 12, 14], 4) # => 2
+# p bsearch([1, 3, 4, 5, 9], 3) # => 1
+# p bsearch([1, 3, 4, 5, 9], 1) # => 0
+# p bsearch([1, 3, 4, 5, 9, 11, 12, 14], 3) # => 1
+# p bsearch([1, 3, 4, 5, 9, 11, 12, 14, 15], 9) # => 4
+# p bsearch([1, 2, 3, 4, 5, 6], 0) # => nil
+# p bsearch([1, 2, 3, 4, 5, 7], 6) # => nil
+
+def merge_sort(array)
+    middle_index = (array.length - 1) / 2
+    if array.length == 0 || array.length == 1
+        return array
+    end
+    first_half = merge_sort(array[0..middle_index])
+    last_half = merge_sort(array[middle_index + 1..array.length - 1])
+    return merge(first_half, last_half)
+end
+
+def merge(array_1, array_2) 
+    sorted_array = []
+    while array_1.length > 0 || array_2.length > 0
+        if array_1[0] && array_2[0]
+            array_1[0] <= array_2[0] ? sorted_array << array_1.shift : sorted_array << array_2.shift
+        elsif array_1[0]
+            sorted_array << array_1.shift
+        else
+            sorted_array << array_2.shift 
+        end
+    end
+    return sorted_array
+end
+
+# tests
+# p merge_sort([1])
+# p merge_sort([])
+# p merge_sort([2, 1])
+# p merge_sort([4, 3, 1, 2])
+# p merge_sort([1100, 1, 32, 11, 424, 22, 11, 11, 22, 20])
+
+def subsets(array)
+    if array.length <= 1
+        return array
+    end
+    subset_array = []
+    (0..array.length - 1).each do |i|
+        subset_array << subsets(array[0...i]) << subsets(array[0...i]).concat([array[-1]])
+    end
+    return subset_array
+end
+
+p subsets([]) # => [[]]
+p subsets([1]) # => [[], [1]]
+p subsets([1, 2]) # => [[], [1], [2], [1, 2]]
+p subsets([1, 2, 3]) # => [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
+
+def permutations(array)
+    
+end
+
+p permutations([1, 2])
+p permutations([1, 2, 3]) # => [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
